@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd ../MIDI-Files
+
+FILES=*
+counter=0
+for f in $FILES;
+do
+  echo "Converting $f to CSV"
+  midicsv "$f" "../CSV-Files/${f%.*}.csv"
+  let counter=counter+1
+  echo "Converted $counter files in $SECONDS seconds."
+  echo
+done;

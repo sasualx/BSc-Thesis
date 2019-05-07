@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd CSV-to-net-test
+./Convert
+
+cd ../Network-Input
+
+mv "AC-DC - The Jack (3).txt" ../ESN/test.txt
+
+cat *.txt > ../ESN/train.txt

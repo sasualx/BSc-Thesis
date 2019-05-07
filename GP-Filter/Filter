@@ -1,0 +1,34 @@
+#!/bin/bash
+
+cd ../Initial-Music-Sheet
+
+FOLDERS=*/
+start=$SECONDS
+counter=0
+
+for f in $FOLDERS;
+do
+  if [ -d "$f" ]; then
+    echo "Going into "$f
+    cd "$f"
+    for file in ./*;
+    do
+      let counter=counter+1
+      echo "RUNNING SCRIPT FOR "$f $file
+      python3 ../../GP-Filter/GP-Filter.py "$file"
+    done;
+    echo "Going out of $f"
+    echo "Did " $counter "files so far."
+    echo "Time passed: " $SECONDS " seconds."
+    echo
+    echo
+    echo
+    echo
+    echo
+    echo
+    echo
+    echo
+
+    cd ..
+  fi
+done;

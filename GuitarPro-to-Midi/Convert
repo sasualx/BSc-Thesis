@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+
+
+cd ../Filtered-music-Sheet
+start=$SECONDS
+FILES=*.gp*
+counter=0
+for f in $FILES;
+do
+  timeout 1s mono ../Convert/Convert.exe "$f"
+  echo "Converted $counter files in " $SECONDS "seconds"
+  let counter=counter+1
+  echo
+  echo
+  echo
+  echo
+
+done;
