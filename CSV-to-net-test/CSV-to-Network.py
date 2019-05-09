@@ -3,57 +3,16 @@ import sys
 
 if len(sys.argv) <=1:
     quit()
-
+print(sys.argv[1])
 drum = {}
 
-drum[36] = 1 #bass drum
-drum[41] = drum[43] = drum[45] = drum[47] = drum[48] = drum[50] = 2 #toms
-drum[38] = drum[40] = 3 #snares
-drum[49] = drum[51] = drum[52] = drum[55] = drum[57] = drum[59] = 4 #cymbals
+drum[35] = drum[36] = 1 #bass drum
+drum[41] = drum[43] = drum[45] = drum[47] = drum[48] = drum[50] = drum[61] = drum[76] = 2 #toms
+drum[33] = drum[37] = drum[38] = drum[40] = drum[54] = drum[56] = drum[70] = drum[83] = drum[82] = drum[81] = 3 #snares
+drum[53] = drum[49] = drum[51] = drum[52] = drum[55] = drum[57] = drum[59] = drum[69] = 4 #cymbals
 drum[42] = drum[44] = drum[46] = 5 #Hi-Hat
 
-division = 40
-'''
-def read_notes(track,fp,line,values):
-    notes = []
-    while int(values[0]) < track:
-        line = fp.readline()
-        values = line.split(', ')
-        values[-1] = values[-1].strip()
-    while int(values[0]) == track:
-        while values[2] != "Note_on_c":
-            line = fp.readline()
-            values = line.split(', ')
-            values[-1] = values[-1].strip()
-            if int(values[0]) != track:
-                break
-        start = values[1]
-        note = values[4]
-        velocity = values[5]
-        while values[2] != "Note_off_c" and values[4] != note:
-            line = fp.readline()
-            values = line.split(', ')
-            values[-1] = values[-1].strip()
-            if int(values[0]) != track:
-                break
-        final = values[1]
-        notes.append((int(start)//16,int(final)//16,note,velocity))
-    return notes
-
-def read_instrument(track,fp,line,values):
-    notes = read_notes(track,fp,line,values)
-    instrument = [None] * notes[-1][1]
-    end = 0
-    for note in notes:
-        if end < note[0]:
-            instrument[end:note[0]] =(0,0,0)
-        instrument[note[0]] = (1,note[2],note[3])
-        instrument[note[0] + 1:note[1]] = (2,note[2],note[3])
-        end = note[1]
-    return instrument
-
-
-'''
+division = 120
 
 def read_instrument(track,fp,line,values):
     instrument = []
@@ -120,7 +79,32 @@ def fix_instrument(instrument):
     return new_vals
 
 
+def read_drums(track,fp,line,values):
+    instrument = []
+    current_time = 0
+    current_velocity = 0
+    instrument.append([0,0,0,0,0])
 
+    while int(values[0]) < track:
+        line = fp.readline()
+        values = line.split(', ')
+        values[-1] = values[-1].strip()
+
+    while int(values[0]) == track:
+        if current_time < int(values[1]):
+            while current_time < int(values[1]):
+                instrument.append([0,0,0,0,0])
+                current_time = current_time + division
+        if(values[2] == "Note_on_c"):
+            if int(values[4]) in drum:
+                instrument[-1][int(drum[int(values[4])])-1] = 1
+            else:
+                instrument[-1][0] = 3
+                print("WRONG " + values[4])
+        line = fp.readline()
+        values = line.split(', ')
+        values[-1] = values[-1].strip()
+    return instrument, line, values
 
 
 fp = open(sys.argv[1], 'r')
@@ -138,22 +122,19 @@ if(values[5] != "960"):
     exit()
 
 #DRUMS
-drums,line,values = read_instrument(2,fp,line,values)
-drums = fix_instrument(drums)
+drums,line,values = read_drums(2,fp,line,values)
 #BASS
 bass,line,values = read_instrument(3,fp,line,values)
 bass = fix_instrument(bass)
 #GUITAR
 #guitar,line,values = read_instrument(4,fp,line,values)
 
-lent = max(len(drums), len(bass), len(guitar))
+lent = max(len(drums), len(bass))
 
 for i in range(lent - len(drums)):
-    drums.append((0,0,0))
+    drums.append([0,0,0,0,0])
 for i in range(lent - len(bass)):
     bass.append((0,0,0))
-for i in range(lent - len(guitar)):
-    guitar.append((0,0,0))
 fp.close()
 
 
@@ -169,9 +150,7 @@ lead = bass
 
 #Only beats
 for i in range(len(drums)):
-    if drums[i][0] != 1:
-        drums[i] = (0,0,0)
-    fp.write(str(lead[i][0]) + " "  + str(lead[i][2]) + " " + str(drums[i][0]) + "\n")
+    fp.write(str(lead[i][0]) + " "  + str(lead[i][1]) + " " + ' '.join(map(str,drums[i])) + "\n")
 
 #all Values
 #for i in range(len(drums)):
