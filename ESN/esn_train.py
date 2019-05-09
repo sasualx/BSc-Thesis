@@ -8,16 +8,18 @@ import pdb
 from numpy import *
 from matplotlib.pyplot import *
 import scipy.linalg
-
+import time
 from Parameters import *
 
 
 # load the data
 #pdb.set_trace()
+start = time.time()
 load = loadtxt('train.txt')
 data = load[:,0:inSize]
 target = load[:,inSize:inSize+outSize]
-print("Loaded Data")
+end = time.time()
+print("Loaded Data in " + str(end - start) + " seconds.")
 
 trainLen = data.shape[0]
 initLen = 5000
@@ -26,34 +28,29 @@ initLen = 5000
 # generate the ESN reservoir
 
 random.seed(42)
-Win = (random.rand(resSize,1+inSize)-0.5) * 1
-fixed_node_connection = 10
-W = None
+start = time.time()
+Win = (random.rand(resSize,1+inSize)-0.5) * input_scaling
+W = zeros((resSize,resSize))
 for idx in range(resSize):
     connections = arange(resSize)
     random.shuffle(connections)
     connections = connections[:fixed_node_connection]
-    newRow = zeros(resSize)
     for con in connections:
-        newRow[con] = random.rand() - 0.5
-    if W is None:
-        W = [newRow]
-    else:
-        W = append(W, [newRow], axis = 0)
+        W[idx][con] = random.rand() - 0.5
 
 spectral_radius = max(abs(linalg.eig(W)[0]))
 while spectral_radius > 1:
     W /= spectral_radius
     spectral_radius = max(abs(linalg.eig(W)[0]))
-
-print("Generated Reservoir")
+end = time.time()
+print("Generated Reservoir in " + str(end - start) + " seconds.")
 #W *= 1.25 / rhoW
 
 # allocated memory for the design (collected states) matrix
 X = zeros((1+inSize+resSize,trainLen-initLen))
 # set the corresponding target matrix directly
 Yt = target[initLen:trainLen].T
-
+start = time.time()
 # run the reservoir with the data and collect X
 x = zeros((resSize,1))
 for t in range(trainLen):
@@ -61,16 +58,18 @@ for t in range(trainLen):
     x = (1-a)*x + a*tanh( dot( Win, vstack((1,u)) ) + dot( W, x ) )
     if t >= initLen:
         X[:,t-initLen] = vstack((1,u,x))[:,0]
+end = time.time()
+print("Generated X in " + str(end - start) + " seconds.")
 
-print("Generated X")
-
+start = time.time()
 # train the output by ridge regression
 reg = 1e-8  # regularization coefficient
 X_T = X.T
 Wout = dot( dot(Yt,X_T), linalg.inv( dot(X,X_T) + \
     reg*eye(1+inSize+resSize) ) )
+end = time.time()
 
-print("Computed Wout")
+print("Computed Wout in " + str(end - start) + " seconds.")
 
 fp = open("Win.txt","w")
 for line in Win:
@@ -82,6 +81,5 @@ for line in W:
 fp.close()
 fp = open("Wout.txt","w")
 for line in Wout:
-    print(' '.join(map(str,line)))
     fp.write(' '.join(map(str,line))+"\n")
 fp.close()
