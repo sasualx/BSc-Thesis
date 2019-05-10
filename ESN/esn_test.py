@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from numpy import *
 from matplotlib.pyplot import *
 import scipy.linalg
@@ -29,11 +31,8 @@ def compute_error_metric(Y,target):
 load = loadtxt('test.txt')
 data = load[:,0:inSize]
 target = load[:,inSize:inSize+outSize]
-
 testLen = data.shape[0]
 
-# run the trained ESN in a generative mode. no need to initialize here,
-# because x is initialized with training data and we continue from there.
 Y = zeros((outSize,testLen))
 x = zeros((resSize,1))
 u = data[0].reshape(inSize,1)
@@ -49,14 +48,7 @@ print(compute_error_metric(Y,target))
 fp = open("output.txt","w")
 for line in Y:
     fp.write(' '.join(map(str,line))+"\n")
-    #if line[0]>0.5:
-    #    fp.write(str(1)+"\n")
-    #else:
-    #    fp.write(str(0)+"\n")
 fp.close()
-#pdb.set_trace()
-
-
 
 figure(2).clear()
 plot( data[300:400,0], 'g' )

@@ -1,8 +1,9 @@
 #!/bin/bash
 
 
-cd ./ESN
-python3 esn_test.py
+cd ./ESN-Output-Feedback
+#python3 esn_train.py
+#python3 esn_test.py
 python3 output_to_midi_csv.py
 mv result.txt ../Final-Step/result.txt
 cd ../Final-Step
