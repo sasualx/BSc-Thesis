@@ -2,14 +2,15 @@
 
 
 
-
+./build
+mkdir ../MIDI-Files
 cd ../Filtered-music-Sheet
 start=$SECONDS
 FILES=*.gp*
 counter=0
 for f in $FILES;
 do
-  timeout 1s mono ../Convert/Convert.exe "$f"
+  timeout 1s mono ../GuitarPro-to-Midi/Convert.exe "$f"
   echo "Converted $counter files in " $SECONDS "seconds"
   let counter=counter+1
   echo
@@ -18,3 +19,4 @@ do
   echo
 
 done;
+cd ..

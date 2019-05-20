@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd GP-Filter
+./Filter
+cd ..
+
+cd GuitarPro-to-Midi
+./Convert
+cd ..
+cd MIDI-to-CSV
+./Convert
+cd ..
+cd CSV-to-net
+./Convert
+cd ..
+
+./Merge-Input

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+mkdir Filtered-Music-Sheet
 cd ../Initial-Music-Sheet
 
 FOLDERS=*/
@@ -15,7 +15,7 @@ do
     do
       let counter=counter+1
       echo "RUNNING SCRIPT FOR "$f $file
-      python3 ../../GP-Filter/GP-Filter.py "$file"
+      #python3 ../../GP-Filter/GP-Filter.py "$file"
     done;
     echo "Going out of $f"
     echo "Did " $counter "files so far."

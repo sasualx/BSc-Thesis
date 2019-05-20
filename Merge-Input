@@ -1,10 +1,11 @@
 #!/bin/bash
 
-cd CSV-to-net-test
+cd CSV-to-net
 ./Convert
 
 cd ../Network-Input
 
-mv "Red Hot Chili Peppers - Can't Stop (5).txt" ../ESN/test.txt
-
+cp "Red Hot Chili Peppers - Can't Stop (5).txt" ../ESN/test.txt
+mv "Red Hot Chili Peppers - Can't Stop (5).txt" ../ESN-Output-Feedback/train.txt
 cat *.txt > ../ESN/train.txt
+cat *.txt > ../ESN-Output-Feedback/train.txt

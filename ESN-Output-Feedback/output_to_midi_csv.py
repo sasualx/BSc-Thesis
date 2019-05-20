@@ -7,7 +7,7 @@ drum[2] = '38' #snares
 drum[3] = '49' #cymbals
 drum[4] = '42' #Hi-Hat
 
-threshhold = [0.2,0.4,0.15,1,0.3]
+threshhold = [0.2,0.033,0.15,0.07,0.3]
 
 with open('output.txt') as f:
     content = f.readlines()

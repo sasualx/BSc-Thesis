@@ -7,8 +7,9 @@ counter=0
 for f in $FILES;
 do
   echo "Converting $f to CSV"
-  midicsv "$f" "../CSV-Files/${f%.*}.csv"
+  midicsv "$f" "../CSV-to-net/${f%.*}.csv"
   let counter=counter+1
   echo "Converted $counter files in $SECONDS seconds."
   echo
 done;
+cd ..

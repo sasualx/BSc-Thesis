@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from numpy import *
 from matplotlib.pyplot import *
@@ -9,6 +9,8 @@ import math
 Win = loadtxt("Win.txt")
 W = loadtxt("W.txt")
 Wout = loadtxt("Wout.txt")
+rc('text', usetex=True)
+rc('font', family='serif')
 
 def prob_fct(p,y):
     r = 0
@@ -53,58 +55,97 @@ for line in Y:
 fp.close()
 
 
+figure(11).clear()
+f11 = figure(11)
+xlabel(r'\textbf{Time}', fontsize=11)
+ylabel(r'\textbf{Value}', fontsize=11)
+plot( data[500:550,0], 'k' )
+plot( target[500:550,0], 'b', alpha=0.7 )
+plot( target[500:550,1], 'm', alpha=0.7 )
+plot( target[500:550,2], 'r', alpha=0.7 )
+plot( target[500:550,3], 'y', alpha=0.7 )
+plot( target[500:550,4], 'g', alpha=0.7 )
+title(r'\textbf{Input training Data}', fontsize=11)
+legend([r'\normalfont{Bass Line Notes Played}', r'\normalfont{Target Bass Drum Data}', r'\normalfont{Target Tom Data}',r'\normalfont{Target Snare Data}', r'\normalfont{Target Cymbal Data}', r'\normalfont{Target Hi-Hat Data}'], fontsize=11)
+
+
+figure(0).clear()
+f0 = figure(0)
+plot( target[500:600,0], 'k' )
+title(r'\textbf{Bass Drum}', fontsize=11)
+
+figure(1).clear()
+f1 = figure(1)
+plot( target[500:600,1], 'k' )
+title(r'\textbf{Tom Drum}', fontsize=11)
+
+
 figure(2).clear()
-plot( data[300:400,0], 'g' )
-plot( target[300:400], 'b' )
-title('Data and target data starting at $n=300$')
-legend(['Input Data', 'Target Data'])
+f2 = figure(2)
+plot( target[500:600,2], 'k' )
+title(r'\textbf{Snare Drum}', fontsize=11)
+
+figure(3).clear()
+f3 = figure(3)
+plot( target[500:600,3], 'k' )
+title(r'\textbf{Cymbal}', fontsize=11)
 
 figure(4).clear()
-plot( Y[300:400,0], 'g' )
-plot( Y[300:400,1], 'b' )
-plot( Y[300:400,2], 'r' )
-plot( Y[300:400,3], 'y' )
-plot( Y[300:400,4], 'k' )
-title('Generated Data $n=300$')
-legend(['BASS DRUM', 'TOM', 'SNARE', 'CYMBAL', 'HI-HAT'])
+f4 = figure(4)
+plot( target[500:600,4], 'k' )
+title(r'\textbf{Hi-Hat}', fontsize=11)
+
+
+
 
 figure(5).clear()
-plot( Y[200:1000,0], 'g' )
-title('Data and target data starting at $n=200$')
-legend(['BASS DRUM'])
+f5 = figure(5)
+plot(target[500:600,0],'b')
+plot( Y[500:600,0], 'k' )
+xlabel(r'\textbf{Time}', fontsize=11)
+ylabel(r'\textbf{Value}', fontsize=11)
+title(r'\textbf{Bass Drum}', fontsize=11)
+legend([r'\textbf{Target Bass Drum}',r'\textbf{Generated Bass Drum}'], fontsize=11)
 
 figure(6).clear()
-plot( Y[200:1000,1], 'b' )
-title('Data and target data starting at $n=200$')
-legend(['TOM'])
+f6 = figure(6)
+plot(target[500:1000,1],'b')
+plot( Y[500:1000,1], 'k' )
+title(r'\textbf{Generated Tom Drum}', fontsize=11)
 
 
 figure(7).clear()
-plot( Y[200:1000,2], 'r' )
-title('Data and target data starting at $n=200$')
-legend(['SNARE'])
+f7 = figure(7)
+plot(target[500:600,2],'b')
+plot( Y[500:600,2], 'k' )
+xlabel(r'\textbf{Time}', fontsize=11)
+ylabel(r'\textbf{Value}', fontsize=11)
+title(r'\textbf{Snare Drum}', fontsize=11)
+ylim(-0.2,1)
+legend([r'\textbf{Target Snare Drum}',r'\textbf{Generated Snare Drum}'], fontsize=11)
+
 
 figure(8).clear()
-plot( Y[200:1000,3], 'y' )
-title('Data and target data starting at $n=200$')
-legend(['CYMBAL'])
+f8 = figure(8)
+plot(target[500:600,3],'b')
+plot( Y[500:600,3], 'k' )
+xlabel(r'\textbf{Time}', fontsize=11)
+ylabel(r'\textbf{Value}', fontsize=11)
+title(r'\textbf{Cymbal}', fontsize=11)
+legend([r'\textbf{Target Cymbal}',r'\textbf{Generated Cymbal}'], fontsize=11)
+
 
 figure(9).clear()
-plot( Y[200:1000,4], 'r' )
-title('Data and target data starting at $n=200$')
-legend(['HI-HAT'])
+f9 = figure(9)
+plot(target[500:600,4],'b')
+plot( Y[500:600,4], 'k' )
+title(r'\textbf{Hi-Hat}', fontsize=11)
+xlabel(r'\textbf{Time}', fontsize=11)
+ylabel(r'\textbf{Value}', fontsize=11)
+legend([r'\textbf{Target Hi-Hat}',r'\textbf{Generated Hi-Hat}'], fontsize=11)
 
-figure(3).clear()
-plot( data[300:400,0], 'g' )
-plot( Y[300:400], 'b' )
-title('Data and generated data starting at $n=300$')
-legend(['Input Data', 'generated Data'])
-
-figure(1).clear()
-plot( target[300:400], 'r' )
-plot( Y[300:400], 'b' )
-title('Target and generated signals starting at $n=300$')
-legend(['Target signal', 'Generated Signal'])
-
-
-show()
+f7.savefig("Generated_Snare_OF.pdf", bbox_inches='tight')
+f8.savefig("Generated_Cymbal_OF.pdf", bbox_inches='tight')
+f5.savefig("Generated_Bass_Drum_OF.pdf", bbox_inches='tight')
+f11.savefig("Input_Data_OF.pdf", bbox_inches='tight')
+f9.savefig("Generated_High_Hat_OF.pdf", bbox_inches='tight')
